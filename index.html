@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instructional Time Recovery Calculator</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root{
+    --navy: #1a2c4e;
+    --navy-deep: #0f1c33;
+    --slate-bg: #eef1f6;
+    --card: #ffffff;
+    --line: #d7dce6;
+    --ink: #23324a;
+    --ink-soft: #5b6a85;
+    --gold: #a8761e;
+    --gold-bg: #fbf3e3;
+    --green: #1b6b3a;
+    --green-bg: #eaf5ee;
+    --red: #a8341f;
+    --red-bg: #fbeceb;
+  }
+
+  * { box-sizing: border-box; }
+
+  body{
+    margin:0;
+    background:var(--slate-bg);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    min-height:100vh;
+  }
+
+  .wrap{
+    max-width:980px;
+    margin:0 auto;
+    padding:2.5rem 1.5rem 4rem;
+  }
+
+  header{
+    margin-bottom:2rem;
+    border-bottom:1px solid var(--line);
+    padding-bottom:1.5rem;
+  }
+
+  .eyebrow{
+    font-size:0.8rem;
+    color:var(--ink-soft);
+    margin-bottom:0.4rem;
+    letter-spacing:0.02em;
+  }
+
+  h1{
+    font-family:'Source Serif 4', serif;
+    font-weight:700;
+    font-size:2.1rem;
+    line-height:1.2;
+    margin:0 0 0.5rem;
+    color:var(--navy-deep);
+  }
+
+  header p{
+    font-size:0.98rem;
+    color:var(--ink-soft);
+    max-width:60ch;
+    line-height:1.5;
+    margin:0;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap:1.75rem;
+    align-items:start;
+  }
+
+  @media (max-width: 800px){
+    .grid{ grid-template-columns: 1fr; }
+  }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:1.75rem;
+  }
+
+  .card h2{
+    font-family:'Source Serif 4', serif;
+    font-size:1.15rem;
+    margin:0 0 1.25rem;
+    color:var(--navy-deep);
+  }
+
+  .field{
+    margin-bottom:1.35rem;
+  }
+
+  .field label{
+    display:block;
+    font-size:0.85rem;
+    font-weight:600;
+    color:var(--ink);
+    margin-bottom:0.4rem;
+  }
+
+  .field .hint{
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    margin-top:0.35rem;
+    line-height:1.4;
+  }
+
+  select, input[type=number]{
+    width:100%;
+    padding:0.6rem 0.7rem;
+    border:1px solid var(--line);
+    border-radius:6px;
+    font-family:'Inter', sans-serif;
+    font-size:0.95rem;
+    color:var(--ink);
+    background:#fff;
+  }
+
+  select:focus, input:focus{
+    outline:2px solid var(--navy);
+    outline-offset:1px;
+  }
+
+  .row2{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:0.75rem;
+  }
+
+  .day-length-row{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:0.75rem;
+  }
+
+  .day-length-row .unit{
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    margin-top:0.3rem;
+  }
+
+  /* Results */
+  .result-hero{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:0.9rem;
+    margin-bottom:1.1rem;
+  }
+
+  .stat{
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:0.9rem 1rem;
+    background:#fbfcfe;
+  }
+
+  .stat .num{
+    font-family:'Source Serif 4', serif;
+    font-size:1.7rem;
+    font-weight:700;
+    color:var(--navy-deep);
+    line-height:1.1;
+  }
+
+  .stat .label{
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    margin-top:0.3rem;
+    line-height:1.35;
+  }
+
+  .stat.waived .num{ color:var(--green); }
+  .stat.makeup .num{ color:var(--red); }
+
+  .divider{
+    border:none;
+    border-top:1px solid var(--line);
+    margin:1.25rem 0;
+  }
+
+  table.detail{
+    width:100%;
+    border-collapse:collapse;
+    font-size:0.9rem;
+  }
+
+  table.detail td{
+    padding:0.55rem 0;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+
+  table.detail td:first-child{
+    color:var(--ink-soft);
+    width:62%;
+  }
+
+  table.detail td:last-child{
+    text-align:right;
+    font-weight:600;
+    color:var(--ink);
+  }
+
+  table.detail tr:last-child td{
+    border-bottom:none;
+  }
+
+  .flag{
+    display:inline-block;
+    padding:0.15rem 0.55rem;
+    border-radius:5px;
+    font-size:0.82rem;
+    font-weight:600;
+  }
+
+  .flag.ok{ background:var(--green-bg); color:var(--green); }
+  .flag.bad{ background:var(--red-bg); color:var(--red); }
+
+  .policy-strip{
+    margin-top:1.75rem;
+    padding:1.1rem 1.3rem;
+    background:var(--gold-bg);
+    border:1px solid #e9d3a3;
+    border-radius:8px;
+    font-size:0.85rem;
+    color:#6b4d13;
+    line-height:1.55;
+  }
+
+  .policy-strip strong{
+    color:var(--navy-deep);
+  }
+
+  .schedule{
+    margin-top:0.9rem;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.35rem;
+  }
+
+  .day-chip{
+    width:2.1rem;
+    height:2.1rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:5px;
+    font-size:0.78rem;
+    font-weight:600;
+    border:1px solid var(--line);
+  }
+
+  .day-chip.waived{ background:var(--green-bg); color:var(--green); border-color:#bfe0cb; }
+  .day-chip.makeup{ background:var(--red-bg); color:var(--red); border-color:#eec6c0; }
+
+  .warn-line{
+    margin-top:1rem;
+    padding:0.75rem 0.9rem;
+    background:var(--red-bg);
+    border:1px solid #eec6c0;
+    border-radius:6px;
+    font-size:0.83rem;
+    color:var(--red);
+    line-height:1.5;
+  }
+
+  footer{
+    margin-top:2rem;
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    line-height:1.5;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Indiana Department of Education — Office of Innovation</div>
+    <h1>Instructional Time Recovery Calculator</h1>
+    <p>Enter a school's grade span, current school-day length, and total days missed to see how many days IDOE will waive, how many must be made up, and how long recovery will take at the school's current schedule.</p>
+  </header>
+
+  <div class="grid">
+    <!-- INPUT CARD -->
+    <div class="card">
+      <h2>School information</h2>
+
+      <div class="field">
+        <label for="highGrade">Highest grade served</label>
+        <select id="highGrade">
+          <option value="K">Kindergarten</option>
+          <option value="1">Grade 1</option>
+          <option value="2">Grade 2</option>
+          <option value="3">Grade 3</option>
+          <option value="4">Grade 4</option>
+          <option value="5">Grade 5</option>
+          <option value="6" selected>Grade 6</option>
+          <option value="7">Grade 7</option>
+          <option value="8">Grade 8</option>
+          <option value="9">Grade 9</option>
+          <option value="10">Grade 10</option>
+          <option value="11">Grade 11</option>
+          <option value="12">Grade 12</option>
+        </select>
+        <div class="hint">Indiana law sets a 5-hour minimum school day for grades 1–6 and a 6-hour minimum for grades 7–12. The highest grade served sets the minimum for the whole school.</div>
+      </div>
+
+      <div class="field">
+        <label>Current school day length</label>
+        <div class="day-length-row">
+          <div>
+            <input type="number" id="dayHours" min="0" max="12" value="6">
+            <div class="unit">hours</div>
+          </div>
+          <div>
+            <input type="number" id="dayMinutes" min="0" max="59" value="30">
+            <div class="unit">minutes</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="daysMissed">Total instructional days missed</label>
+        <input type="number" id="daysMissed" min="0" max="60" value="8">
+        <div class="hint">Count every day school was called off for this event.</div>
+      </div>
+
+      <hr class="divider">
+      <div class="policy-strip">
+        <strong>Waiver policy.</strong> The first 5 missed days must always be made up. Beyond that, IDOE waives every other missed day, up to 3 waived days total. Every remaining day beyond the 3 waivers must be made up.
+      </div>
+    </div>
+
+    <!-- RESULTS CARD -->
+    <div class="card">
+      <h2>Recovery summary</h2>
+
+      <div class="result-hero">
+        <div class="stat waived">
+          <div class="num" id="outWaived">–</div>
+          <div class="label">Days waived by IDOE</div>
+        </div>
+        <div class="stat makeup">
+          <div class="num" id="outMakeup">–</div>
+          <div class="label">Days that must be made up</div>
+        </div>
+      </div>
+
+      <div id="waiverSchedule"></div>
+
+      <hr class="divider">
+
+      <table class="detail">
+        <tr>
+          <td>State-required minimum day</td>
+          <td id="outRequired">–</td>
+        </tr>
+        <tr>
+          <td>Current school day length</td>
+          <td id="outActual">–</td>
+        </tr>
+        <tr>
+          <td>Surplus minutes per day over the minimum</td>
+          <td id="outSurplus">–</td>
+        </tr>
+        <tr>
+          <td>Total instructional time lost <span style="font-weight:400;color:var(--ink-soft)">(days requiring make-up × state minimum day)</span></td>
+          <td id="outLostTime">–</td>
+        </tr>
+        <tr>
+          <td>Days needed to recover lost time using current day's surplus</td>
+          <td id="outRecoverDays">–</td>
+        </tr>
+      </table>
+
+      <div id="warnBox"></div>
+    </div>
+  </div>
+
+  <footer>
+    Built from Indiana's statutory day-length minimums (5 hrs, grades 1–6; 6 hrs, grades 7–12) and IDOE's missed-day waiver policy as described. Verify against the current IDOE waiver guidance for the specific calendar event before submitting a corporation's recovery plan.
+  </footer>
+
+</div>
+
+<script>
+function requiredHours(highGrade){
+  if (highGrade === 'K') return 5;
+  const g = parseInt(highGrade, 10);
+  return g >= 7 ? 6 : 5;
+}
+
+function waiverBreakdown(missed){
+  if (missed <= 0) return { waived: 0, makeup: 0, schedule: [] };
+  const schedule = []; // 'auto-makeup' for first 5, then 'waived'/'makeup' alternating up to 3 waived
+  let waivedCount = 0;
+  for (let i = 1; i <= missed; i++){
+    if (i <= 5){
+      schedule.push('makeup');
+      continue;
+    }
+    const posAfterFive = i - 5; // 1-indexed position among the "extra" days
+    if (posAfterFive % 2 === 1 && waivedCount < 3){
+      schedule.push('waived');
+      waivedCount++;
+    } else {
+      schedule.push('makeup');
+    }
+  }
+  const waived = schedule.filter(s => s === 'waived').length;
+  const makeup = schedule.filter(s => s === 'makeup').length;
+  return { waived, makeup, schedule };
+}
+
+function fmtMin(mins){
+  const h = Math.floor(mins/60);
+  const m = Math.round(mins % 60);
+  if (h === 0) return `${m} min`;
+  if (m === 0) return `${h} hr`;
+  return `${h} hr ${m} min`;
+}
+
+function fmtDays(d){
+  if (!isFinite(d)) return '—';
+  return (Math.round(d*100)/100).toString();
+}
+
+function render(){
+  const highGrade = document.getElementById('highGrade').value;
+  const hours = parseFloat(document.getElementById('dayHours').value) || 0;
+  const mins = parseFloat(document.getElementById('dayMinutes').value) || 0;
+  const missed = Math.max(0, parseInt(document.getElementById('daysMissed').value, 10) || 0);
+
+  const reqHours = requiredHours(highGrade);
+  const reqMinutes = reqHours * 60;
+  const actualMinutes = hours*60 + mins;
+  const surplus = actualMinutes - reqMinutes;
+
+  const { waived, makeup, schedule } = waiverBreakdown(missed);
+
+  const lostMinutes = makeup * reqMinutes;
+  const recoverDays = surplus > 0 ? lostMinutes / surplus : Infinity;
+
+  document.getElementById('outWaived').textContent = waived;
+  document.getElementById('outMakeup').textContent = makeup;
+
+  document.getElementById('outRequired').textContent = `${reqHours} hr / day (grades ${reqHours === 6 ? '7–12' : '1–6'})`;
+  document.getElementById('outActual').textContent = fmtMin(actualMinutes);
+  document.getElementById('outSurplus').textContent = surplus >= 0 ? `+${fmtMin(surplus)}` : `${fmtMin(Math.abs(surplus))} below minimum`;
+  document.getElementById('outLostTime').textContent = makeup > 0 ? fmtMin(lostMinutes) : '0 min';
+  document.getElementById('outRecoverDays').textContent = surplus > 0 ? fmtDays(recoverDays) + ' days' : '—';
+
+  // waiver schedule chips
+  const scheduleEl = document.getElementById('waiverSchedule');
+  if (schedule.length){
+    scheduleEl.innerHTML = '<div class="hint" style="margin-bottom:0.5rem;">Day-by-day waiver outcome</div><div class="schedule">' +
+      schedule.map((s,i)=>`<div class="day-chip ${s === 'waived' ? 'waived' : 'makeup'}" title="Day ${i+1}: ${s === 'waived' ? 'Waived' : 'Make up'}">${i+1}</div>`).join('') +
+      '</div>';
+  } else {
+    scheduleEl.innerHTML = '';
+  }
+
+  // warnings
+  const warnBox = document.getElementById('warnBox');
+  let warnings = '';
+  if (surplus <= 0 && makeup > 0){
+    warnings += `<div class="warn-line">This school's current day does not exceed the state minimum, so extending existing days can't recover lost time — the corporation will need to add full instructional days instead.</div>`;
+  }
+  if (actualMinutes < reqMinutes){
+    warnings += `<div class="warn-line">Current day length is below the state-required minimum for the highest grade served. Confirm this schedule independently of the missed-day question.</div>`;
+  }
+  warnBox.innerHTML = warnings;
+}
+
+['highGrade','dayHours','dayMinutes','daysMissed'].forEach(id => {
+  document.getElementById(id).addEventListener('input', render);
+  document.getElementById(id).addEventListener('change', render);
+});
+
+render();
+</script>
+
+</body>
+</html>
