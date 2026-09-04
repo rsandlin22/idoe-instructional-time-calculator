@@ -40,7 +40,7 @@
   }
 
   header{
-    margin-bottom:2rem;
+    margin-bottom:1.5rem;
     border-bottom:1px solid var(--line);
     padding-bottom:1.5rem;
   }
@@ -64,9 +64,93 @@
   header p{
     font-size:0.98rem;
     color:var(--ink-soft);
-    max-width:60ch;
+    max-width:66ch;
     line-height:1.5;
     margin:0;
+  }
+
+  .policy-strip{
+    margin-bottom:1.75rem;
+    padding:1.1rem 1.3rem;
+    background:var(--gold-bg);
+    border:1px solid #e9d3a3;
+    border-radius:8px;
+    font-size:0.85rem;
+    color:#6b4d13;
+    line-height:1.55;
+  }
+
+  .policy-strip strong{
+    color:var(--navy-deep);
+  }
+
+  /* School block (one per school) */
+  .school-block{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:10px;
+    margin-bottom:1.5rem;
+    overflow:hidden;
+  }
+
+  .school-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:0.75rem;
+    padding:0.9rem 1.5rem;
+    background:#fbfcfe;
+    border-bottom:1px solid var(--line);
+  }
+
+  .school-name-input{
+    font-family:'Source Serif 4', serif;
+    font-size:1.1rem;
+    font-weight:700;
+    color:var(--navy-deep);
+    border:1px solid transparent;
+    background:transparent;
+    padding:0.25rem 0.5rem;
+    border-radius:6px;
+    flex:1;
+    min-width:0;
+  }
+
+  .school-name-input:hover{
+    border-color:var(--line);
+  }
+
+  .school-name-input:focus{
+    outline:none;
+    border-color:var(--navy);
+    background:#fff;
+  }
+
+  .remove-btn{
+    flex-shrink:0;
+    border:1px solid var(--line);
+    background:#fff;
+    color:var(--red);
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.4rem 0.8rem;
+    border-radius:6px;
+    cursor:pointer;
+  }
+
+  .remove-btn:hover{
+    background:var(--red-bg);
+    border-color:#eec6c0;
+  }
+
+  .remove-btn:disabled{
+    opacity:0.4;
+    cursor:not-allowed;
+    background:#fff;
+  }
+
+  .school-body{
+    padding:1.5rem 1.5rem 1.75rem;
   }
 
   .grid{
@@ -80,17 +164,10 @@
     .grid{ grid-template-columns: 1fr; }
   }
 
-  .card{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:10px;
-    padding:1.75rem;
-  }
-
-  .card h2{
+  .panel h3{
     font-family:'Source Serif 4', serif;
-    font-size:1.15rem;
-    margin:0 0 1.25rem;
+    font-size:1.02rem;
+    margin:0 0 1.1rem;
     color:var(--navy-deep);
   }
 
@@ -127,12 +204,6 @@
   select:focus, input:focus{
     outline:2px solid var(--navy);
     outline-offset:1px;
-  }
-
-  .row2{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    gap:0.75rem;
   }
 
   .day-length-row{
@@ -213,32 +284,6 @@
     border-bottom:none;
   }
 
-  .flag{
-    display:inline-block;
-    padding:0.15rem 0.55rem;
-    border-radius:5px;
-    font-size:0.82rem;
-    font-weight:600;
-  }
-
-  .flag.ok{ background:var(--green-bg); color:var(--green); }
-  .flag.bad{ background:var(--red-bg); color:var(--red); }
-
-  .policy-strip{
-    margin-top:1.75rem;
-    padding:1.1rem 1.3rem;
-    background:var(--gold-bg);
-    border:1px solid #e9d3a3;
-    border-radius:8px;
-    font-size:0.85rem;
-    color:#6b4d13;
-    line-height:1.55;
-  }
-
-  .policy-strip strong{
-    color:var(--navy-deep);
-  }
-
   .schedule{
     margin-top:0.9rem;
     display:flex;
@@ -272,6 +317,27 @@
     line-height:1.5;
   }
 
+  .add-school-btn{
+    display:block;
+    width:100%;
+    padding:0.9rem;
+    margin-bottom:0.5rem;
+    border:1.5px dashed var(--line);
+    border-radius:10px;
+    background:transparent;
+    color:var(--ink-soft);
+    font-family:'Inter', sans-serif;
+    font-size:0.9rem;
+    font-weight:600;
+    cursor:pointer;
+  }
+
+  .add-school-btn:hover{
+    border-color:var(--navy);
+    color:var(--navy-deep);
+    background:#fbfcfe;
+  }
+
   footer{
     margin-top:2rem;
     font-size:0.78rem;
@@ -286,105 +352,16 @@
   <header>
     <div class="eyebrow">Indiana Department of Education — Office of Innovation</div>
     <h1>Instructional Time Recovery Calculator</h1>
-    <p>Enter a school's grade span, current school-day length, and total days missed to see how many days IDOE will waive, how many must be made up, and how long recovery will take at the school's current schedule.</p>
+    <p>Enter each school's grade span, current school-day length, and total days missed to see how many days IDOE will waive, how many must be made up, and how long recovery will take at the school's current schedule. Add a school for each building — elementary, middle, and high — to compare them side by side.</p>
   </header>
 
-  <div class="grid">
-    <!-- INPUT CARD -->
-    <div class="card">
-      <h2>School information</h2>
-
-      <div class="field">
-        <label for="highGrade">Highest grade served</label>
-        <select id="highGrade">
-          <option value="K">Kindergarten</option>
-          <option value="1">Grade 1</option>
-          <option value="2">Grade 2</option>
-          <option value="3">Grade 3</option>
-          <option value="4">Grade 4</option>
-          <option value="5">Grade 5</option>
-          <option value="6" selected>Grade 6</option>
-          <option value="7">Grade 7</option>
-          <option value="8">Grade 8</option>
-          <option value="9">Grade 9</option>
-          <option value="10">Grade 10</option>
-          <option value="11">Grade 11</option>
-          <option value="12">Grade 12</option>
-        </select>
-        <div class="hint">Indiana law sets a 5-hour minimum school day for grades 1–6 and a 6-hour minimum for grades 7–12. The highest grade served sets the minimum for the whole school.</div>
-      </div>
-
-      <div class="field">
-        <label>Current school day length</label>
-        <div class="day-length-row">
-          <div>
-            <input type="number" id="dayHours" min="0" max="12" value="6">
-            <div class="unit">hours</div>
-          </div>
-          <div>
-            <input type="number" id="dayMinutes" min="0" max="59" value="30">
-            <div class="unit">minutes</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="field">
-        <label for="daysMissed">Total instructional days missed</label>
-        <input type="number" id="daysMissed" min="0" max="60" value="8">
-        <div class="hint">Count every day school was called off for weather-related factors.</div>
-      </div>
-
-      <hr class="divider">
-      <div class="policy-strip">
-        <strong>Waiver policy.</strong> The first 5 missed days must always be made up. Beyond that, IDOE waives every other missed day, up to 3 waived days total. Every remaining day beyond the 3 waivers must be made up.
-      </div>
-    </div>
-
-    <!-- RESULTS CARD -->
-    <div class="card">
-      <h2>Recovery summary</h2>
-
-      <div class="result-hero">
-        <div class="stat waived">
-          <div class="num" id="outWaived">–</div>
-          <div class="label">Days waived by IDOE</div>
-        </div>
-        <div class="stat makeup">
-          <div class="num" id="outMakeup">–</div>
-          <div class="label">Days that must be made up</div>
-        </div>
-      </div>
-
-      <div id="waiverSchedule"></div>
-
-      <hr class="divider">
-
-      <table class="detail">
-        <tr>
-          <td>State-required minimum day</td>
-          <td id="outRequired">–</td>
-        </tr>
-        <tr>
-          <td>Current school day length</td>
-          <td id="outActual">–</td>
-        </tr>
-        <tr>
-          <td>Surplus minutes per day over the minimum</td>
-          <td id="outSurplus">–</td>
-        </tr>
-        <tr>
-          <td>Total instructional time lost <span style="font-weight:400;color:var(--ink-soft)">(days requiring make-up × state minimum day)</span></td>
-          <td id="outLostTime">–</td>
-        </tr>
-        <tr>
-          <td>Days needed to recover lost time using current day's surplus</td>
-          <td id="outRecoverDays">–</td>
-        </tr>
-      </table>
-
-      <div id="warnBox"></div>
-    </div>
+  <div class="policy-strip">
+    <strong>Waiver policy.</strong> The first 5 missed days must always be made up. Beyond that, IDOE waives every other missed day, up to 3 waived days total. Every remaining day beyond the 3 waivers must be made up.
   </div>
+
+  <div id="schoolsContainer"></div>
+
+  <button type="button" class="add-school-btn" id="addSchoolBtn">+ Add school</button>
 
   <footer>
     Built from Indiana's statutory day-length minimums (5 hrs, grades 1–6; 6 hrs, grades 7–12) and IDOE's missed-day waiver policy as described. Verify against the current IDOE waiver guidance for the specific calendar event before submitting a corporation's recovery plan.
@@ -393,6 +370,120 @@
 </div>
 
 <script>
+const DEFAULT_TYPES = [
+  { name: 'Elementary School', grade: '5' },
+  { name: 'Middle School', grade: '8' },
+  { name: 'High School', grade: '11' },
+];
+
+const GRADE_OPTIONS = [
+  ['K', 'Kindergarten'], ['1', 'Grade 1'], ['2', 'Grade 2'], ['3', 'Grade 3'],
+  ['4', 'Grade 4'], ['5', 'Grade 5'], ['6', 'Grade 6'], ['7', 'Grade 7'],
+  ['8', 'Grade 8'], ['9', 'Grade 9'], ['10', 'Grade 10'], ['11', 'Grade 11'], ['12', 'Grade 12'],
+];
+
+let blockCounter = 0;
+const container = document.getElementById('schoolsContainer');
+
+function nextDefault(){
+  const existing = container.querySelectorAll('.school-block').length;
+  if (existing < DEFAULT_TYPES.length) return DEFAULT_TYPES[existing];
+  return { name: `School ${existing + 1}`, grade: '6' };
+}
+
+function gradeOptionsHTML(selected){
+  return GRADE_OPTIONS.map(([val, label]) =>
+    `<option value="${val}"${val === selected ? ' selected' : ''}>${label}</option>`
+  ).join('');
+}
+
+function schoolBlockHTML(id, def){
+  return `
+    <div class="school-block" data-id="${id}">
+      <div class="school-header">
+        <input type="text" class="school-name-input" data-role="schoolName" value="${def.name}" aria-label="School name">
+        <button type="button" class="remove-btn" data-action="remove">Remove</button>
+      </div>
+      <div class="school-body">
+        <div class="grid">
+          <div class="panel">
+            <h3>School information</h3>
+
+            <div class="field">
+              <label>Highest grade served</label>
+              <select data-role="highGrade">${gradeOptionsHTML(def.grade)}</select>
+              <div class="hint">Indiana law sets a 5-hour minimum school day for grades 1–6 and a 6-hour minimum for grades 7–12. The highest grade served sets the minimum for the whole school.</div>
+            </div>
+
+            <div class="field">
+              <label>Current school day length</label>
+              <div class="day-length-row">
+                <div>
+                  <input type="number" data-role="dayHours" min="0" max="12" value="6">
+                  <div class="unit">hours</div>
+                </div>
+                <div>
+                  <input type="number" data-role="dayMinutes" min="0" max="59" value="30">
+                  <div class="unit">minutes</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Total instructional days missed</label>
+              <input type="number" data-role="daysMissed" min="0" max="60" value="8">
+              <div class="hint">Count every day school was called off for weather-related factors.</div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3>Recovery summary</h3>
+
+            <div class="result-hero">
+              <div class="stat waived">
+                <div class="num" data-out="waived">–</div>
+                <div class="label">Days waived by IDOE</div>
+              </div>
+              <div class="stat makeup">
+                <div class="num" data-out="makeup">–</div>
+                <div class="label">Days that must be made up</div>
+              </div>
+            </div>
+
+            <div data-out="schedule"></div>
+
+            <hr class="divider">
+
+            <table class="detail">
+              <tr>
+                <td>State-required minimum day</td>
+                <td data-out="required">–</td>
+              </tr>
+              <tr>
+                <td>Current school day length</td>
+                <td data-out="actual">–</td>
+              </tr>
+              <tr>
+                <td>Surplus minutes per day over the minimum</td>
+                <td data-out="surplus">–</td>
+              </tr>
+              <tr>
+                <td>Total instructional time lost <span style="font-weight:400;color:var(--ink-soft)">(days requiring make-up × state minimum day)</span></td>
+                <td data-out="lostTime">–</td>
+              </tr>
+              <tr>
+                <td>Days needed to recover lost time using current day's surplus</td>
+                <td data-out="recoverDays">–</td>
+              </tr>
+            </table>
+
+            <div data-out="warn"></div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
 function requiredHours(highGrade){
   if (highGrade === 'K') return 5;
   const g = parseInt(highGrade, 10);
@@ -401,7 +492,7 @@ function requiredHours(highGrade){
 
 function waiverBreakdown(missed){
   if (missed <= 0) return { waived: 0, makeup: 0, schedule: [] };
-  const schedule = []; // 'auto-makeup' for first 5, then 'waived'/'makeup' alternating up to 3 waived
+  const schedule = []; // 'makeup' for first 5, then 'waived'/'makeup' alternating up to 3 waived
   let waivedCount = 0;
   for (let i = 1; i <= missed; i++){
     if (i <= 5){
@@ -434,11 +525,11 @@ function fmtDays(d){
   return (Math.round(d*100)/100).toString();
 }
 
-function render(){
-  const highGrade = document.getElementById('highGrade').value;
-  const hours = parseFloat(document.getElementById('dayHours').value) || 0;
-  const mins = parseFloat(document.getElementById('dayMinutes').value) || 0;
-  const missed = Math.max(0, parseInt(document.getElementById('daysMissed').value, 10) || 0);
+function renderBlock(block){
+  const highGrade = block.querySelector('[data-role="highGrade"]').value;
+  const hours = parseFloat(block.querySelector('[data-role="dayHours"]').value) || 0;
+  const mins = parseFloat(block.querySelector('[data-role="dayMinutes"]').value) || 0;
+  const missed = Math.max(0, parseInt(block.querySelector('[data-role="daysMissed"]').value, 10) || 0);
 
   const reqHours = requiredHours(highGrade);
   const reqMinutes = reqHours * 60;
@@ -450,17 +541,16 @@ function render(){
   const lostMinutes = makeup * reqMinutes;
   const recoverDays = surplus > 0 ? lostMinutes / surplus : Infinity;
 
-  document.getElementById('outWaived').textContent = waived;
-  document.getElementById('outMakeup').textContent = makeup;
+  block.querySelector('[data-out="waived"]').textContent = waived;
+  block.querySelector('[data-out="makeup"]').textContent = makeup;
 
-  document.getElementById('outRequired').textContent = `${reqHours} hr / day (grades ${reqHours === 6 ? '7–12' : '1–6'})`;
-  document.getElementById('outActual').textContent = fmtMin(actualMinutes);
-  document.getElementById('outSurplus').textContent = surplus >= 0 ? `+${fmtMin(surplus)}` : `${fmtMin(Math.abs(surplus))} below minimum`;
-  document.getElementById('outLostTime').textContent = makeup > 0 ? fmtMin(lostMinutes) : '0 min';
-  document.getElementById('outRecoverDays').textContent = surplus > 0 ? fmtDays(recoverDays) + ' days' : '—';
+  block.querySelector('[data-out="required"]').textContent = `${reqHours} hr / day (grades ${reqHours === 6 ? '7–12' : '1–6'})`;
+  block.querySelector('[data-out="actual"]').textContent = fmtMin(actualMinutes);
+  block.querySelector('[data-out="surplus"]').textContent = surplus >= 0 ? `+${fmtMin(surplus)}` : `${fmtMin(Math.abs(surplus))} below minimum`;
+  block.querySelector('[data-out="lostTime"]').textContent = makeup > 0 ? fmtMin(lostMinutes) : '0 min';
+  block.querySelector('[data-out="recoverDays"]').textContent = surplus > 0 ? fmtDays(recoverDays) + ' days' : '—';
 
-  // waiver schedule chips
-  const scheduleEl = document.getElementById('waiverSchedule');
+  const scheduleEl = block.querySelector('[data-out="schedule"]');
   if (schedule.length){
     scheduleEl.innerHTML = '<div class="hint" style="margin-bottom:0.5rem;">Day-by-day waiver outcome</div><div class="schedule">' +
       schedule.map((s,i)=>`<div class="day-chip ${s === 'waived' ? 'waived' : 'makeup'}" title="Day ${i+1}: ${s === 'waived' ? 'Waived' : 'Make up'}">${i+1}</div>`).join('') +
@@ -469,8 +559,7 @@ function render(){
     scheduleEl.innerHTML = '';
   }
 
-  // warnings
-  const warnBox = document.getElementById('warnBox');
+  const warnBox = block.querySelector('[data-out="warn"]');
   let warnings = '';
   if (surplus <= 0 && makeup > 0){
     warnings += `<div class="warn-line">This school's current day does not exceed the state minimum, so extending existing days can't recover lost time — the corporation will need to add full instructional days instead.</div>`;
@@ -481,12 +570,43 @@ function render(){
   warnBox.innerHTML = warnings;
 }
 
-['highGrade','dayHours','dayMinutes','daysMissed'].forEach(id => {
-  document.getElementById(id).addEventListener('input', render);
-  document.getElementById(id).addEventListener('change', render);
+function updateRemoveButtons(){
+  const blocks = container.querySelectorAll('.school-block');
+  const disable = blocks.length <= 1;
+  blocks.forEach(b => { b.querySelector('[data-action="remove"]').disabled = disable; });
+}
+
+function addSchool(){
+  const id = blockCounter++;
+  const def = nextDefault();
+  container.insertAdjacentHTML('beforeend', schoolBlockHTML(id, def));
+  renderBlock(container.lastElementChild);
+  updateRemoveButtons();
+}
+
+container.addEventListener('input', e => {
+  if (e.target.matches('[data-role]:not([data-role="schoolName"])')){
+    renderBlock(e.target.closest('.school-block'));
+  }
 });
 
-render();
+container.addEventListener('change', e => {
+  if (e.target.matches('[data-role]:not([data-role="schoolName"])')){
+    renderBlock(e.target.closest('.school-block'));
+  }
+});
+
+container.addEventListener('click', e => {
+  const btn = e.target.closest('[data-action="remove"]');
+  if (!btn || btn.disabled) return;
+  if (container.querySelectorAll('.school-block').length <= 1) return;
+  btn.closest('.school-block').remove();
+  updateRemoveButtons();
+});
+
+document.getElementById('addSchoolBtn').addEventListener('click', addSchool);
+
+addSchool();
 </script>
 
 </body>
