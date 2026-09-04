@@ -25,6 +25,10 @@
 
   * { box-sizing: border-box; }
 
+  html{
+    font-size:14px;
+  }
+
   body{
     margin:0;
     background:var(--slate-bg);
@@ -34,9 +38,9 @@
   }
 
   .wrap{
-    max-width:980px;
+    max-width:940px;
     margin:0 auto;
-    padding:2.5rem 1.5rem 4rem;
+    padding:2.25rem 1.5rem 3.5rem;
   }
 
   header{
@@ -150,18 +154,22 @@
   }
 
   .school-body{
-    padding:1.5rem 1.5rem 1.75rem;
+    padding:1.35rem 1.5rem 1.5rem;
   }
 
   .grid{
     display:grid;
-    grid-template-columns: 1fr 1.15fr;
-    gap:1.75rem;
-    align-items:start;
+    grid-template-columns: 1fr 1px 1.15fr;
+    gap:1.5rem;
+  }
+
+  .panel-divider{
+    background:var(--line);
   }
 
   @media (max-width: 800px){
     .grid{ grid-template-columns: 1fr; }
+    .panel-divider{ display:none; }
   }
 
   .panel h3{
@@ -172,7 +180,7 @@
   }
 
   .field{
-    margin-bottom:1.35rem;
+    margin-bottom:1.1rem;
   }
 
   .field label{
@@ -435,6 +443,8 @@ function schoolBlockHTML(id, def){
               <div class="hint">Count every day school was called off for weather-related factors.</div>
             </div>
           </div>
+
+          <div class="panel-divider"></div>
 
           <div class="panel">
             <h3>Recovery summary</h3>
