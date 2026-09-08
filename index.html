@@ -230,7 +230,7 @@
     line-height:1.4;
   }
 
-  select, input[type=number]{
+  select, input[type=number], input[type=text]{
     width:100%;
     padding:0.6rem 0.7rem;
     border:1px solid var(--line);
@@ -378,11 +378,52 @@
     background:#fbfcfe;
   }
 
+  .toolbar{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:1.5rem;
+    margin-bottom:1.5rem;
+    flex-wrap:wrap;
+  }
+
+  .corp-field{
+    flex:1;
+    min-width:260px;
+    margin-bottom:0;
+  }
+
+  .print-btn{
+    flex-shrink:0;
+    padding:0.65rem 1.15rem;
+    border:1px solid var(--navy);
+    background:var(--navy);
+    color:#fff;
+    border-radius:6px;
+    font-family:'Inter', sans-serif;
+    font-weight:600;
+    font-size:0.88rem;
+    cursor:pointer;
+  }
+
+  .print-btn:hover{
+    background:var(--navy-deep);
+  }
+
   footer{
     margin-top:2rem;
     font-size:0.78rem;
     color:var(--ink-soft);
     line-height:1.5;
+  }
+
+  @media print{
+    body{ background:#fff; }
+    .wrap{ max-width:100%; padding:0.25rem 0.5rem; }
+    .print-btn, .add-school-btn, .remove-btn{ display:none !important; }
+    .school-name-input{ border-color:transparent !important; background:transparent !important; }
+    .school-block{ break-inside:avoid; page-break-inside:avoid; border-color:#aab2c2; }
+    *{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
   }
 </style>
 </head>
@@ -399,6 +440,14 @@
       <p class="statute-text">Sec. 1. As used in this chapter, "instructional time" is time during which students are participating in (1) an approved course; (2) a curriculum; or (3) an educationally related activity; under the direction of a teacher, including a reasonable amount of passing time between classes. <mark>Instructional time does not include lunch or recess.</mark></p>
     </div>
   </header>
+
+  <div class="toolbar">
+    <div class="field corp-field">
+      <label for="schoolCorp">School corporation</label>
+      <input type="text" id="schoolCorp" placeholder="e.g., Example Community School Corporation">
+    </div>
+    <button type="button" class="print-btn" id="printBtn">Print / Save as PDF</button>
+  </div>
 
   <div class="policy-strip">
     <strong>Waiver policy.</strong> The first 5 missed days must always be made up. Beyond that, IDOE waives every other missed day, up to 3 waived days total. Every remaining day beyond the 3 waivers must be made up.
@@ -652,6 +701,14 @@ container.addEventListener('click', e => {
 });
 
 document.getElementById('addSchoolBtn').addEventListener('click', addSchool);
+
+document.getElementById('printBtn').addEventListener('click', () => {
+  const corp = document.getElementById('schoolCorp').value.trim();
+  document.title = corp
+    ? `Instructional Time Recovery — ${corp}`
+    : 'Instructional Time Recovery Calculator';
+  window.print();
+});
 
 addSchool();
 </script>
