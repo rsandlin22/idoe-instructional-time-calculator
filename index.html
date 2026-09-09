@@ -568,6 +568,10 @@ function schoolBlockHTML(id, def){
                 <td data-out="lostTime">–</td>
               </tr>
               <tr>
+                <td>Extended days needed to recover <span style="font-weight:400;color:var(--ink-soft)">a single missed day</span></td>
+                <td data-out="recoverPerDay">–</td>
+              </tr>
+              <tr>
                 <td>Days needed to recover lost time using current day's surplus</td>
                 <td data-out="recoverDays">–</td>
               </tr>
@@ -635,6 +639,7 @@ function renderBlock(block){
   const { waived, makeup, schedule } = waiverBreakdown(missed);
 
   const lostMinutes = makeup * reqMinutes;
+  const recoverPerDay = surplus > 0 ? reqMinutes / surplus : Infinity;
   const recoverDays = surplus > 0 ? lostMinutes / surplus : Infinity;
 
   block.querySelector('[data-out="waived"]').textContent = waived;
@@ -644,6 +649,7 @@ function renderBlock(block){
   block.querySelector('[data-out="actual"]').textContent = fmtMin(actualMinutes);
   block.querySelector('[data-out="surplus"]').textContent = surplus >= 0 ? `+${fmtMin(surplus)}` : `${fmtMin(Math.abs(surplus))} below minimum`;
   block.querySelector('[data-out="lostTime"]').textContent = makeup > 0 ? fmtMin(lostMinutes) : '0 min';
+  block.querySelector('[data-out="recoverPerDay"]').textContent = surplus > 0 ? fmtDays(recoverPerDay) + ' days' : '—';
   block.querySelector('[data-out="recoverDays"]').textContent = surplus > 0 ? fmtDays(recoverDays) + ' days' : '—';
 
   const scheduleEl = block.querySelector('[data-out="schedule"]');
